@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Site Launcher</title>
+  <style>
+    body {
+      width: 350px;
+      min-height: 400px;
+      margin: 0;
+      padding: 10px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f5f5;
+    }
+
+    h2 {
+      margin: 0 0 15px 0;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .search-box {
+      width: 100%;
+      padding: 8px 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .site-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .site-item {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      margin-bottom: 5px;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .site-item:hover {
+      background: #e3f2fd;
+      transform: translateX(5px);
+    }
+
+    .site-key {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      background: #2196F3;
+      color: white;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 12px;
+      margin-right: 10px;
+    }
+
+    .site-name {
+      flex: 1;
+      font-size: 14px;
+      color: #333;
+    }
+
+    .site-url {
+      font-size: 11px;
+      color: #666;
+      margin-left: 34px;
+    }
+
+    .add-site-section {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+    }
+
+    .input-group {
+      margin-bottom: 10px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 6px 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .btn-add {
+      width: 100%;
+      padding: 8px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-add:hover {
+      background: #45a049;
+    }
+
+    .delete-btn {
+      padding: 4px 8px;
+      font-size: 11px;
+      background: #f44336;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background: #d32f2f;
+    }
+
+    .message {
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    .message.success {
+      background: #c8e6c9;
+      color: #2e7d32;
+    }
+
+    .message.error {
+      background: #ffcdd2;
+      color: #c62828;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Site Launcher</h2>
+
+  <input type="text" id="searchBox" class="search-box" placeholder="サイトを検索...">
+
+  <div id="message"></div>
+
+  <ul id="siteList" class="site-list">
+    <!-- サイトリストがここに表示されます -->
+  </ul>
+
+  <div class="add-site-section">
+    <h3 style="font-size: 16px; margin: 0 0 10px 0;">新しいサイトを追加</h3>
+    <div class="input-group">
+      <label for="siteName">サイト名</label>
+      <input type="text" id="siteName" placeholder="例: Google">
+    </div>
+    <div class="input-group">
+      <label for="siteUrl">URL</label>
+      <input type="text" id="siteUrl" placeholder="例: https://google.com">
+    </div>
+    <div class="input-group">
+      <label for="siteKey">ショートカットキー (A-Z, 0-9)</label>
+      <input type="text" id="siteKey" placeholder="例: G" maxlength="1">
+    </div>
+    <button id="addSite" class="btn-add">サイトを追加</button>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>

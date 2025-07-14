@@ -1,15 +1,15 @@
 {
   "manifest_version": 3,
   "name": "Site Launcher",
-  "version": "1.0",
-  "description": "キーボードショートカットでサイトを素早く開く",
+  "version": "1.0.0",
+  "description": "キーボードショートカットでお気に入りのサイトを素早く開くChrome拡張機能",
   "permissions": ["storage", "tabs"],
   "action": {
-    "default_popup": "dist/popup.html",
+    "default_popup": "popup.html",
     "default_icon": {
-      "16": "public/icon16.png",
-      "48": "public/icon48.png",
-      "128": "public/icon128.png"
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
     }
   },
   "commands": {
@@ -22,12 +22,12 @@
     }
   },
   "background": {
-    "service_worker": "dist/background.js",
+    "service_worker": "background.js",
     "type": "module"
   },
   "icons": {
-    "16": "public/icon16.png",
-    "48": "public/icon48.png",
-    "128": "public/icon128.png"
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   }
 }

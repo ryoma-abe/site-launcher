@@ -1,0 +1,112 @@
+.site-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.site-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.site-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.site-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.site-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.site-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 5px;
+  background: white;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.site-item:hover {
+  background: #e3f2fd;
+  transform: translateX(5px);
+}
+
+.site-icon-wrapper {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.site-favicon {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+}
+
+.site-key {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  background: #2196F3;
+  color: white;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.site-key.hidden {
+  display: none;
+}
+
+.site-info {
+  flex: 1;
+  min-width: 0;
+  margin-right: 8px;
+}
+
+.site-name {
+  font-size: 14px;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.site-url {
+  font-size: 11px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.delete-btn {
+  padding: 4px 8px;
+  font-size: 11px;
+  background: #f44336;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.delete-btn:hover {
+  background: #d32f2f;
+}

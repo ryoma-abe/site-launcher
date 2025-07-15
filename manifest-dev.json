@@ -3,7 +3,7 @@
   "name": "Site Launcher",
   "version": "1.0.0",
   "description": "キーボードショートカットでお気に入りのサイトを素早く開くChrome拡張機能",
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {

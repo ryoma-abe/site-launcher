@@ -57,15 +57,14 @@ export const App: React.FC = () => {
     }
   };
 
-  // サイトを新しいタブで開く
   const openSite = (url: string) => {
-    try {
-      chrome.tabs.create({ url });
-      window.close();
-    } catch (error) {
-      console.error('Failed to open site:', error);
-      showMessage('サイトを開けませんでした', 'error');
-    }
+    chrome.windows.getLastFocused({ populate: true }, (window) => {
+      const activeTab = window.tabs?.find(tab => tab.active);
+      if (activeTab && activeTab.id) {
+        chrome.tabs.update(activeTab.id, { url });
+      }
+    });
+    window.close();
   };
 
   const addSite = async (site: Site) => {

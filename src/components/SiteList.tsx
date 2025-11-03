@@ -1,5 +1,5 @@
 import React from 'react';
-import { Site } from '../../types';
+import { Site } from '../types';
 import './SiteList.css';
 
 interface SiteListProps {

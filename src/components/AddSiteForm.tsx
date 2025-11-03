@@ -1,30 +1,57 @@
-import React, { useState } from 'react';
-import { Site } from '../../types';
+import React, { useEffect, useState } from 'react';
+import { Site } from '../types';
+import { normalizeUrl } from '../shared/sites';
 import './AddSiteForm.css';
 
 interface AddSiteFormProps {
   onAdd: (site: Site) => Promise<boolean>;
+  initialValues?: Partial<Site> | null;
+  submitLabel?: string;
+  onSubmitSuccess?: () => void;
+  title?: string | null;
 }
 
-export const AddSiteForm: React.FC<AddSiteFormProps> = ({ onAdd }) => {
+export const AddSiteForm: React.FC<AddSiteFormProps> = ({
+  onAdd,
+  initialValues = null,
+  submitLabel = 'サイトを追加',
+  onSubmitSuccess,
+  title = '新しいサイトを追加',
+}) => {
   const [name, setName] = useState('');
   const [url, setUrl] = useState('');
-  const [key, setKey] = useState('');
+  const [shortcutKey, setShortcutKey] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!initialValues) {
+      setName('');
+      setUrl('');
+      setShortcutKey('');
+      setError(null);
+      return;
+    }
+
+    setName(initialValues.name ?? '');
+    setUrl(initialValues.url ?? '');
+    setShortcutKey(initialValues.key ?? '');
+    setError(null);
+  }, [initialValues]);
 
   // 入力値のバリデーション
   const validateInput = (name: string, url: string, key: string) => {
     if (!name || !url || !key) {
-      alert('すべてのフィールドを入力してください');
+      setError('すべてのフィールドを入力してください');
       return false;
     }
 
     if (name.length > 50) {
-      alert('サイト名は50文字以内で入力してください');
+      setError('サイト名は50文字以内で入力してください');
       return false;
     }
 
     if (!/^[A-Z0-9]$/.test(key)) {
-      alert('ショートカットキーはA-Z、0-9の1文字にしてください');
+      setError('ショートカットキーはA-Z、0-9の1文字にしてください');
       return false;
     }
 
@@ -32,27 +59,24 @@ export const AddSiteForm: React.FC<AddSiteFormProps> = ({ onAdd }) => {
     try {
       new URL(url.startsWith('http') ? url : 'https://' + url);
     } catch {
-      alert('有効なURLを入力してください');
+      setError('有効なURLを入力してください');
       return false;
     }
 
+    setError(null);
     return true;
   };
 
   const handleSubmit = async () => {
     const trimmedName = name.trim();
     const trimmedUrl = url.trim();
-    const trimmedKey = key.trim().toUpperCase();
+    const trimmedKey = shortcutKey.trim().toUpperCase();
 
     if (!validateInput(trimmedName, trimmedUrl, trimmedKey)) {
       return;
     }
 
-    // URLの正規化
-    let normalizedUrl = trimmedUrl;
-    if (!trimmedUrl.startsWith('http://') && !trimmedUrl.startsWith('https://')) {
-      normalizedUrl = 'https://' + trimmedUrl;
-    }
+    const normalizedUrl = normalizeUrl(trimmedUrl);
 
     const success = await onAdd({
       name: trimmedName,
@@ -63,7 +87,9 @@ export const AddSiteForm: React.FC<AddSiteFormProps> = ({ onAdd }) => {
     if (success) {
       setName('');
       setUrl('');
-      setKey('');
+      setShortcutKey('');
+      setError(null);
+      onSubmitSuccess?.();
     }
   };
 
@@ -75,7 +101,7 @@ export const AddSiteForm: React.FC<AddSiteFormProps> = ({ onAdd }) => {
 
   return (
     <div className="add-site-section">
-      <h3>新しいサイトを追加</h3>
+      {title !== null && <h3>{title}</h3>}
       <div className="input-group">
         <label htmlFor="siteName">サイト名</label>
         <input
@@ -105,13 +131,14 @@ export const AddSiteForm: React.FC<AddSiteFormProps> = ({ onAdd }) => {
           id="siteKey"
           placeholder="例: G"
           maxLength={1}
-          value={key}
-          onChange={(e) => setKey(e.target.value)}
+          value={shortcutKey}
+          onChange={(e) => setShortcutKey(e.target.value)}
           onKeyPress={handleKeyPress}
         />
       </div>
+      {error && <p className="form-error">{error}</p>}
       <button className="btn-add" onClick={handleSubmit}>
-        サイトを追加
+        {submitLabel}
       </button>
     </div>
   );

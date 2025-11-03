@@ -12,8 +12,8 @@ Site Launcher は、よく使うサイトをショートカットキーでぱっ
 
 ## インストール方法
 
-1. Chrome ウェブストア版（公開済みの場合）をインストール。または GitHub Releases の ZIP をダウンロード。
-2. 手動インストールする場合は `chrome://extensions/` を開き、デベロッパーモードをオン → 「パッケージ化されていない拡張機能を読み込む」から `dist` フォルダを選択します。
+1. [Chrome ウェブストア版](https://chromewebstore.google.com/detail/site-launcher/jahndejpknmaippmlngfodgkkmiodfai) を開き、「Chrome に追加」をクリックします。
+2. ベータ版を手動で試す場合は GitHub Releases の ZIP をダウンロードし、`chrome://extensions/` でデベロッパーモードをオン → 「パッケージ化されていない拡張機能を読み込む」から `dist` フォルダを選択します。
 
 ## 使い方
 

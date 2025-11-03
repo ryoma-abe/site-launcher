@@ -1,38 +1,121 @@
-/**
- * Site Launcher Chrome Extension Background Script
- * 
- * このスクリプトは拡張機能のバックグラウンドで動作し、
- * インストール時の初期化とキーボードショートカットの処理を行います。
- */
+import {
+  DEFAULT_SITES,
+  PendingSitePayload,
+  SITES_STORAGE_KEY,
+  generateKey,
+  loadSites,
+} from '../shared/sites';
 
-// 拡張機能がインストールされた時の処理
-chrome.runtime.onInstalled.addListener(async () => {
-  console.log("Site Launcher がインストールされました");
+const CONTEXT_MENU_ID = 'site-launcher-add-current';
 
+const ensureDefaultSites = async () => {
   try {
-    // 既存のサイトデータがあるかチェック
-    const result = await chrome.storage.sync.get(["sites"]);
-    
-    // 初回インストール時のみデフォルトサイトを設定
-    if (!result.sites) {
-      const defaultSites = [
-        { name: "Google", url: "https://google.com", key: "G" },
-      ];
-      await chrome.storage.sync.set({ sites: defaultSites });
-      console.log("デフォルトサイトを設定しました");
+    const result = await chrome.storage.sync.get([SITES_STORAGE_KEY]);
+    if (!result[SITES_STORAGE_KEY]) {
+      await chrome.storage.sync.set({ [SITES_STORAGE_KEY]: DEFAULT_SITES });
+      console.info('Default sites initialised');
     }
   } catch (error) {
-    console.error("初期化処理でエラーが発生しました:", error);
+    console.error('Failed to initialise default sites', error);
   }
+};
+
+const registerContextMenu = () => {
+  chrome.contextMenus.removeAll(() => {
+    const removeError = chrome.runtime.lastError;
+    if (removeError) {
+      console.debug('Context menu cleanup notice:', removeError.message);
+    }
+
+    chrome.contextMenus.create(
+      {
+        id: CONTEXT_MENU_ID,
+        title: 'Site Launcher に追加',
+        contexts: ['page', 'frame', 'link'],
+      },
+      () => {
+        const createError = chrome.runtime.lastError;
+        if (createError) {
+          console.error('Failed to create context menu', createError);
+        }
+      }
+    );
+  });
+};
+
+const extractPreferredKey = (url: URL): string | undefined => {
+  const hostname = url.hostname.replace(/^www\./, '');
+  const firstChar = hostname[0];
+  if (!firstChar) {
+    return undefined;
+  }
+  const candidate = firstChar.toUpperCase();
+  return /[A-Z0-9]/.test(candidate) ? candidate : undefined;
+};
+
+const handleContextMenuClick = async (
+  info: chrome.contextMenus.OnClickData,
+  tab?: chrome.tabs.Tab
+) => {
+  if (info.menuItemId !== CONTEXT_MENU_ID) {
+    return;
+  }
+
+  const rawUrl = (info.linkUrl ?? info.pageUrl ?? tab?.url ?? '').trim();
+  if (!rawUrl) {
+    console.warn('No URL available for context menu action');
+    return;
+  }
+
+  let targetUrl: URL;
+  try {
+    targetUrl = new URL(rawUrl);
+    if (!['http:', 'https:'].includes(targetUrl.protocol)) {
+      console.warn('Unsupported protocol for context menu action', targetUrl.protocol);
+      return;
+    }
+  } catch (error) {
+    console.warn('Invalid URL for context menu action', rawUrl, error);
+    return;
+  }
+
+  const existingSites = await loadSites();
+  const preferredKey = extractPreferredKey(targetUrl);
+  const availableKey = generateKey(existingSites, preferredKey);
+  const siteTitle = tab?.title?.trim() || targetUrl.hostname;
+
+  const payload: PendingSitePayload = {
+    name: siteTitle,
+    url: targetUrl.href,
+    preferredKey: availableKey ?? preferredKey,
+  };
+
+  await chrome.storage.local.set({ pendingSite: payload });
+
+  if (chrome.runtime.openOptionsPage) {
+    chrome.runtime.openOptionsPage();
+  } else {
+    chrome.tabs.create({ url: chrome.runtime.getURL('options.html') });
+  }
+};
+
+chrome.runtime.onInstalled.addListener(async () => {
+  await ensureDefaultSites();
+  registerContextMenu();
 });
 
-// キーボードショートカットのコマンドを処理
+chrome.runtime.onStartup.addListener(() => {
+  registerContextMenu();
+});
+
+chrome.contextMenus.onClicked.addListener(handleContextMenuClick);
+
 chrome.commands.onCommand.addListener((command) => {
-  if (command === "_execute_action") {
+  if (command === '_execute_action') {
     try {
       chrome.action.openPopup();
     } catch (error) {
-      console.error("ポップアップを開けませんでした:", error);
+      console.error('ポップアップを開けませんでした:', error);
     }
   }
 });

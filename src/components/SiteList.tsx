@@ -1,5 +1,5 @@
 import React from 'react';
-import { Site } from '../../types';
+import { Site } from '../types';
 import './SiteList.css';
 
 interface SiteListProps {
@@ -23,7 +23,8 @@ export const SiteList: React.FC<SiteListProps> = ({ sites, onSiteClick, onDelete
     <ul className="site-list">
       {sites.map((site, index) => {
         const faviconUrl = getFaviconUrl(site.url);
-        
+        const shortcut = site.key.toUpperCase();
+
         return (
           <li
             key={index}
@@ -34,24 +35,32 @@ export const SiteList: React.FC<SiteListProps> = ({ sites, onSiteClick, onDelete
               }
             }}
           >
-            <div className="site-icon-wrapper">
-              {faviconUrl ? (
-                <img 
-                  src={faviconUrl} 
-                  alt={site.name} 
-                  className="site-favicon"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                  }}
-                />
-              ) : null}
-              <span className={`site-key ${faviconUrl ? 'hidden' : ''}`}>{site.key}</span>
+            <div className="site-main">
+              <div className="site-icon-wrapper">
+                {faviconUrl ? (
+                  <img
+                    src={faviconUrl}
+                    alt="サイトのファビコン"
+                    className="site-favicon"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                      const fallback = e.currentTarget.nextElementSibling as HTMLElement | null;
+                      fallback?.classList.remove('hidden');
+                    }}
+                  />
+                ) : null}
+                <span className={`site-icon-fallback ${faviconUrl ? 'hidden' : ''}`} aria-hidden="true">
+                  {site.name.charAt(0).toUpperCase() || shortcut}
+                </span>
+              </div>
+              <div className="site-info">
+                <div className="site-name">{site.name}</div>
+                <div className="site-url">{site.url}</div>
+              </div>
             </div>
-            <div className="site-info">
-              <div className="site-name">{site.name}</div>
-              <div className="site-url">{site.url}</div>
-            </div>
+            <span className="site-key-pill" aria-label={`ショートカット ${shortcut}`}>
+              {shortcut}
+            </span>
             <button
               className="delete-btn"
               onClick={(e) => {

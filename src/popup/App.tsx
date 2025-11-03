@@ -1,19 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Site } from '../types';
-import { SiteList } from './components/SiteList';
-import { AddSiteForm } from './components/AddSiteForm';
-import { Message } from './components/Message';
-import { SettingsIcon } from './components/SettingsIcon';
+import { SiteList } from '../components/SiteList';
+import { AddSiteForm } from '../components/AddSiteForm';
+import { Message } from '../components/Message';
+import { NavBar } from '../components/NavBar';
+import { addSite as persistSite, loadSites, removeSiteByIndex } from '../shared/sites';
 import './App.css';
-
-const defaultSites: Site[] = [{ name: "Google", url: "https://google.com", key: "G" }];
 
 export const App: React.FC = () => {
   const [sites, setSites] = useState<Site[]>([]);
   const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
 
+  const showMessage = useCallback((text: string, type: 'success' | 'error') => {
+    setMessage({ text, type });
+  }, []);
+
   useEffect(() => {
-    loadSites();
+    const initialize = async () => {
+      const initialSites = await loadSites();
+      setSites(initialSites);
+    };
+
+    initialize();
   }, []);
 
   useEffect(() => {
@@ -35,82 +43,87 @@ export const App: React.FC = () => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [sites]);
 
-  // データ永続化関連の処理
-  const loadSites = async () => {
-    try {
-      const result = await chrome.storage.sync.get(['sites']);
-      setSites(result.sites || defaultSites);
-    } catch (error) {
-      console.error('Failed to load sites:', error);
-      showMessage('サイトの読み込みに失敗しました', 'error');
-      setSites(defaultSites);
+  useEffect(() => {
+    if (!message) {
+      return;
     }
-  };
 
-  const saveSites = async (newSites: Site[]) => {
-    try {
-      await chrome.storage.sync.set({ sites: newSites });
-      setSites(newSites);
-    } catch (error) {
-      console.error('Failed to save sites:', error);
-      showMessage('サイトの保存に失敗しました', 'error');
-    }
-  };
+    const timeout = setTimeout(() => setMessage(null), 3000);
+    return () => clearTimeout(timeout);
+  }, [message]);
 
-  // サイトを新しいタブで開く
-  const openSite = (url: string) => {
-    try {
-      chrome.tabs.create({ url });
-      window.close();
-    } catch (error) {
-      console.error('Failed to open site:', error);
-      showMessage('サイトを開けませんでした', 'error');
-    }
-  };
+  const openSite = useCallback((url: string) => {
+    chrome.windows.getLastFocused({ populate: true }, (window) => {
+      const activeTab = window.tabs?.find((tab) => tab.active);
+      if (activeTab && activeTab.id) {
+        chrome.tabs.update(activeTab.id, { url });
+      }
+    });
+    window.close();
+  }, []);
 
-  const addSite = async (site: Site) => {
-    if (sites.some((s) => s.key.toUpperCase() === site.key.toUpperCase())) {
-      showMessage('そのショートカットキーは既に使用されています', 'error');
+  const addSite = useCallback(async (site: Site) => {
+    const result = await persistSite(site, sites);
+    if (!result.success) {
+      showMessage(result.message, 'error');
       return false;
     }
 
-    const newSites = [...sites, site];
-    await saveSites(newSites);
+    setSites(result.sites);
     showMessage('サイトを追加しました', 'success');
     return true;
-  };
+  }, [showMessage, sites]);
 
-  const deleteSite = async (index: number) => {
-    if (confirm('このサイトを削除しますか？')) {
-      const newSites = sites.filter((_, i) => i !== index);
-      await saveSites(newSites);
-      showMessage('サイトを削除しました', 'success');
+  const deleteSite = useCallback(async (index: number) => {
+    if (!confirm('このサイトを削除しますか？')) {
+      return;
     }
-  };
 
-  const showMessage = (text: string, type: 'success' | 'error') => {
-    setMessage({ text, type });
-    setTimeout(() => setMessage(null), 3000);
-  };
+    const updated = await removeSiteByIndex(index, sites);
+    setSites(updated);
+    showMessage('サイトを削除しました', 'success');
+  }, [showMessage, sites]);
 
+  const openSettingsPage = useCallback(() => {
+    if (chrome.runtime.openOptionsPage) {
+      chrome.runtime.openOptionsPage();
+    } else {
+      chrome.tabs.create({ url: chrome.runtime.getURL('options.html') });
+    }
+    window.close();
+  }, []);
 
-  const openShortcutSettings = () => {
-    chrome.tabs.create({ url: 'chrome://extensions/shortcuts' });
-  };
+  const openGuidePage = useCallback(() => {
+    chrome.tabs.create({ url: chrome.runtime.getURL('import-export.html') });
+    window.close();
+  }, []);
+
+  const navActions = useMemo(
+    () => [
+      { label: '設定ページ', onClick: openSettingsPage, variant: 'primary' as const },
+      { label: '説明ページ', onClick: openGuidePage, variant: 'tonal' as const },
+    ],
+    [openGuidePage, openSettingsPage]
+  );
+
+  const shortcutInfo = useMemo(() => (
+    <p>
+      💡 詳細な設定やショートカットの変更は設定ページから行えます
+    </p>
+  ), []);
 
   return (
     <div className="app">
-      <div className="header">
-        <h2>Site Launcher</h2>
-        <button className="settings-btn" onClick={openShortcutSettings} title="ショートカット設定">
-          <SettingsIcon />
-        </button>
-      </div>
+      <NavBar title="Site Launcher" subtitle="お気に入りサイトへワンクリック" actions={navActions} />
       {message && <Message text={message.text} type={message.type} />}
-      <SiteList sites={sites} onSiteClick={openSite} onDelete={deleteSite} />
-      <AddSiteForm onAdd={addSite} />
+      <div className="surface">
+        <SiteList sites={sites} onSiteClick={openSite} onDelete={deleteSite} />
+      </div>
+      <div className="surface">
+        <AddSiteForm onAdd={addSite} />
+      </div>
       <div className="shortcut-info">
-        <p>💡 ランチャーを開くショートカットは設定で変更できます</p>
+        {shortcutInfo}
       </div>
     </div>
   );

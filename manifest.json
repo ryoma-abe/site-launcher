@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Site Launcher",
-  "version": "1.0",
+  "version": "2.0",
   "description": "キーボードショートカットでサイトを素早く開く",
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage", "contextMenus"],
   "action": {
     "default_popup": "dist/popup.html",
     "default_icon": {
@@ -11,6 +11,10 @@
       "48": "public/icon48.png",
       "128": "public/icon128.png"
     }
+  },
+  "options_ui": {
+    "page": "dist/options.html",
+    "open_in_tab": true
   },
   "commands": {
     "_execute_action": {

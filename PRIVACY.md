@@ -1,6 +1,6 @@
 # プライバシーポリシー - Site Launcher
 
-最終更新日: 2025年1月14日
+最終更新日: 2025年11月3日
 
 ## 1. はじめに
 
@@ -91,9 +91,9 @@ Site Launcher Chrome拡張機能（以下「本拡張機能」）は、ユーザ
 
 ## 12. お問い合わせ
 
-プライバシーに関するご質問やご不明な点がございましたら、以下までお問い合わせください：
+プライバシーに関するご質問やご不明な点がございましたら、以下までお問い合わせください。
 
-- GitHub Issues: [https://github.com/[あなたのユーザー名]/site-launcher/issues](https://github.com/[あなたのユーザー名]/site-launcher/issues)
+- GitHub Issues: [https://github.com/ryoma-abe/site-launcher/issues](https://github.com/ryoma-abe/site-launcher/issues)
 
 ## 13. 適用法
 

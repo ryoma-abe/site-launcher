@@ -33,6 +33,7 @@
   transition: transform 0.16s ease, box-shadow 0.2s ease;
   box-shadow: 0 5px 14px rgba(60, 72, 88, 0.08);
   border: 1px solid #e6e9ef;
+  gap: 14px;
 }
 
 .site-item:hover {
@@ -40,11 +41,19 @@
   box-shadow: 0 8px 18px rgba(60, 72, 88, 0.12);
 }
 
+
+.site-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
 .site-icon-wrapper {
   position: relative;
   width: 38px;
   height: 38px;
-  margin-right: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,6 +61,7 @@
   border-radius: 11px;
   color: #556897;
   font-weight: 600;
+  overflow: hidden;
 }
 
 .site-favicon {
@@ -60,19 +70,18 @@
   border-radius: 6px;
 }
 
-.site-key {
+.site-icon-fallback {
   font-size: 14px;
   letter-spacing: 0.02em;
 }
 
-.site-key.hidden {
+.site-icon-fallback.hidden {
   display: none;
 }
 
 .site-info {
   flex: 1;
   min-width: 0;
-  margin-right: 12px;
 }
 
 .site-name {
@@ -84,6 +93,22 @@
   text-overflow: ellipsis;
 }
 
+.site-key-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #4458a8;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.08);
+}
+
 .site-url {
   font-size: 12px;
   color: #6f7a86;
@@ -93,10 +118,10 @@
 }
 
 .delete-btn {
-  padding: 5px 11px;
+  padding: 6px 12px;
   font-size: 12px;
-  background: #f6d7d7;
-  color: #a35252;
+  background: #f1bcbc;
+  color: #8e3f3f;
   border: none;
   border-radius: 999px;
   cursor: pointer;

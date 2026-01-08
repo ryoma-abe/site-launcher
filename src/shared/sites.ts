@@ -66,7 +66,7 @@ export const normalizeUrl = (url: string): string => {
 
 export const loadSites = async (): Promise<Site[]> => {
   try {
-    const result = await chrome.storage.sync.get([SITES_STORAGE_KEY]);
+    const result = await chrome.storage.local.get([SITES_STORAGE_KEY]);
     const rawSites = result[SITES_STORAGE_KEY] as Site[] | undefined;
 
     if (!rawSites || !Array.isArray(rawSites)) {
@@ -96,7 +96,7 @@ export const loadSites = async (): Promise<Site[]> => {
 };
 
 export const saveSites = async (sites: Site[]): Promise<void> => {
-  await chrome.storage.sync.set({ [SITES_STORAGE_KEY]: sites });
+  await chrome.storage.local.set({ [SITES_STORAGE_KEY]: sites });
 };
 
 export const sanitizeSiteList = (sites: Site[] | unknown): Site[] => {

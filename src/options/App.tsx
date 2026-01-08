@@ -5,9 +5,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { AddSiteForm } from "../components/AddSiteForm";
-import { Message } from "../components/Message";
-import { NavBar } from "../components/NavBar";
 import { Site } from "../types";
 import {
   PendingSitePayload,
@@ -37,17 +34,24 @@ export const App: React.FC = () => {
   const [isImporting, setIsImporting] = useState(false);
   const [formMode, setFormMode] = useState<FormMode>("add");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [initialFormValues, setInitialFormValues] = useState<Partial<Site> | null>(null);
+  const [formName, setFormName] = useState("");
+  const [formUrl, setFormUrl] = useState("");
+  const [formKey, setFormKey] = useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const showMessage = useCallback((text: string, type: "success" | "error") => {
-    setMessage({ text, type });
-  }, []);
+  const showMessage = useCallback(
+    (text: string, type: "success" | "error") => {
+      setMessage({ text, type });
+    },
+    []
+  );
 
   const resetFormState = useCallback(() => {
     setFormMode("add");
     setEditingIndex(null);
-    setInitialFormValues(null);
+    setFormName("");
+    setFormUrl("");
+    setFormKey("");
   }, []);
 
   const loadPendingSite = useCallback(
@@ -69,7 +73,10 @@ export const App: React.FC = () => {
         if (duplicateIndex !== -1) {
           setFormMode("edit");
           setEditingIndex(duplicateIndex);
-          setInitialFormValues(currentSites[duplicateIndex]);
+          const existingSite = currentSites[duplicateIndex];
+          setFormName(existingSite.name);
+          setFormUrl(existingSite.url);
+          setFormKey(existingSite.key);
           showMessage(
             "このサイトは既に登録されています。内容を更新できます。",
             "error"
@@ -79,11 +86,9 @@ export const App: React.FC = () => {
 
         const availableKey = generateKey(currentSites, pending.preferredKey);
         setFormMode("add");
-        setInitialFormValues({
-          name: pending.name ?? "",
-          url: normalizedUrl,
-          key: availableKey ?? pending.preferredKey ?? "",
-        });
+        setFormName(pending.name ?? "");
+        setFormUrl(normalizedUrl);
+        setFormKey(availableKey ?? pending.preferredKey ?? "");
 
         if (!availableKey && pending.preferredKey) {
           showMessage(
@@ -100,7 +105,7 @@ export const App: React.FC = () => {
         console.error("Failed to load pending site payload", error);
       }
     },
-    [generateKey, normalizeUrl, setEditingIndex, setFormMode, showMessage]
+    [showMessage]
   );
 
   const refreshSites = useCallback(async () => {
@@ -142,17 +147,19 @@ export const App: React.FC = () => {
   );
 
   const handleFormSubmit = useCallback(
-    async (site: Site) => {
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+
+      const trimmedName = formName.trim();
+      const trimmedUrl = normalizeUrl(formUrl);
+      const normalizedKey = formKey.trim().toUpperCase();
+
+      if (!trimmedName || !trimmedUrl || !normalizedKey) {
+        showMessage("すべてのフィールドを入力してください", "error");
+        return;
+      }
+
       if (formMode === "edit" && editingIndex !== null) {
-        const trimmedName = site.name.trim();
-        const trimmedUrl = normalizeUrl(site.url);
-        const normalizedKey = site.key.trim().toUpperCase();
-
-        if (!trimmedName || !trimmedUrl || !normalizedKey) {
-          showMessage("すべてのフィールドを入力してください", "error");
-          return false;
-        }
-
         const duplicateKeyIndex = sites.findIndex(
           (item, idx) =>
             idx !== editingIndex && item.key.toUpperCase() === normalizedKey
@@ -162,7 +169,7 @@ export const App: React.FC = () => {
             "他のサイトで同じショートカットキーが使われています",
             "error"
           );
-          return false;
+          return;
         }
 
         const updated = [...sites];
@@ -176,27 +183,45 @@ export const App: React.FC = () => {
         setSites(updated);
         showMessage("サイトを更新しました", "success");
         resetFormState();
-        return true;
+        return;
       }
+
+      const site: Site = {
+        name: trimmedName,
+        url: trimmedUrl,
+        key: normalizedKey,
+      };
 
       const result = await persistSite(site, sites);
       if (!result.success) {
         showMessage(result.message, "error");
-        return false;
+        return;
       }
 
       setSites(result.sites);
       showMessage("サイトを追加しました", "success");
-      return true;
+      resetFormState();
     },
-    [editingIndex, formMode, sites, showMessage, resetFormState]
+    [
+      editingIndex,
+      formKey,
+      formMode,
+      formName,
+      formUrl,
+      sites,
+      showMessage,
+      resetFormState,
+    ]
   );
 
   const handleEdit = useCallback(
     (index: number) => {
       setFormMode("edit");
       setEditingIndex(index);
-      setInitialFormValues(sites[index]);
+      const site = sites[index];
+      setFormName(site.name);
+      setFormUrl(site.url);
+      setFormKey(site.key);
     },
     [sites]
   );
@@ -234,7 +259,7 @@ export const App: React.FC = () => {
     } finally {
       setIsExporting(false);
     }
-  }, [exportSitesAsJson, showMessage]);
+  }, [showMessage]);
 
   const triggerImport = useCallback(() => {
     fileInputRef.current?.click();
@@ -266,39 +291,19 @@ export const App: React.FC = () => {
         event.target.value = "";
       }
     },
-    [importSitesFromJson, resetFormState, showMessage]
+    [resetFormState, showMessage]
   );
 
-  const navActions = useMemo(
-    () => [
-      { label: "ガイド", onClick: openGuidePage, variant: "ghost" as const, external: true },
-      {
-        label: "ショートカット設定",
-        onClick: openShortcutSettings,
-        variant: "tonal" as const,
-      },
-      {
-        label: isExporting ? "エクスポート中…" : "エクスポート",
-        onClick: handleExport,
-        variant: "tonal" as const,
-        disabled: isExporting,
-      },
-      {
-        label: isImporting ? "インポート中…" : "インポート",
-        onClick: triggerImport,
-        variant: "primary" as const,
-        disabled: isImporting,
-      },
-    ],
-    [
-      handleExport,
-      isExporting,
-      isImporting,
-      openGuidePage,
-      openShortcutSettings,
-      triggerImport,
-    ]
-  );
+  const logoUrl = useMemo(() => {
+    try {
+      const manifest = chrome.runtime.getManifest();
+      const icons = manifest.icons || {};
+      const iconPath = icons["128"] || icons["48"] || icons["32"] || icons["16"];
+      return iconPath ? chrome.runtime.getURL(iconPath) : null;
+    } catch {
+      return null;
+    }
+  }, []);
 
   const getFaviconUrl = (url: string) => {
     try {
@@ -309,12 +314,12 @@ export const App: React.FC = () => {
     }
   };
 
-  const formTitle = formMode === "edit" ? "サイトを編集" : "新しいサイトを追加";
-  const formSubmitLabel = formMode === "edit" ? "変更を保存" : "サイトを追加";
+  const formTitle = formMode === "edit" ? "サイトを編集" : "新規追加";
+  const formSubmitLabel = formMode === "edit" ? "変更を保存" : "追加";
 
   return (
     <div className="options-app">
-      <NavBar title="RYX-SITE LAUNCHER" subtitle="SETTINGS" actions={navActions} />
+      {message && <Message text={message.text} type={message.type} />}
       <input
         ref={fileInputRef}
         type="file"
@@ -323,15 +328,60 @@ export const App: React.FC = () => {
         onChange={handleImportChange}
       />
 
-      {message && <Message text={message.text} type={message.type} />}
+      {/* Header */}
+      <header className="header">
+        <div className="header-logo">
+          {logoUrl && <img src={logoUrl} alt="RYX-Site Launcher" />}
+        </div>
+        <div className="header-title">
+          <h1>RYX-Site Launcher</h1>
+          <p>Settings</p>
+        </div>
+        <div className="header-actions">
+          <button className="header-btn" onClick={openGuidePage}>
+            ガイド
+            <svg
+              width="10"
+              height="10"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+            >
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" y1="14" x2="21" y2="3" />
+            </svg>
+          </button>
+          <button className="header-btn" onClick={openShortcutSettings}>
+            ショートカット設定
+          </button>
+          <button
+            className="header-btn"
+            onClick={handleExport}
+            disabled={isExporting}
+          >
+            {isExporting ? "エクスポート中…" : "エクスポート"}
+          </button>
+          <button
+            className="header-btn primary"
+            onClick={triggerImport}
+            disabled={isImporting}
+          >
+            {isImporting ? "インポート中…" : "インポート"}
+          </button>
+        </div>
+      </header>
 
+      {/* Main Layout */}
       <div className="main-layout">
+        {/* Sites Panel */}
         <section className="panel panel-sites">
           <h2 className="panel-title">登録済みサイト</h2>
           {isLoading ? (
             <div className="site-grid-empty">読み込み中...</div>
           ) : sites.length === 0 ? (
-            <div className="site-grid-empty">登録されたサイトはありません</div>
+            <div className="site-grid-empty">サイトが登録されていません</div>
           ) : (
             <div className="site-grid-options">
               {sites.map((site, index) => {
@@ -343,69 +393,55 @@ export const App: React.FC = () => {
                   <div
                     key={`${site.key}-${site.url}`}
                     className={`site-card-options ${isEditing ? "editing" : ""}`}
+                    onClick={() => handleEdit(index)}
                   >
-                    <div className="site-card-options-header">
-                      <span className="site-key-options">{shortcut}</span>
-                      <div className="site-card-options-actions">
-                        <button
-                          type="button"
-                          className="site-action-btn edit"
-                          onClick={() => handleEdit(index)}
-                          aria-label="編集"
+                    <div className="site-icon-wrapper-options">
+                      <div className="site-icon-options">
+                        {faviconUrl ? (
+                          <img
+                            src={faviconUrl}
+                            alt=""
+                            className="site-favicon-options"
+                            onError={(e) => {
+                              e.currentTarget.style.display = "none";
+                              const fallback = e.currentTarget
+                                .nextElementSibling as HTMLElement | null;
+                              if (fallback) fallback.style.display = "flex";
+                            }}
+                          />
+                        ) : null}
+                        <span
+                          className="site-fallback-options"
+                          style={{ display: faviconUrl ? "none" : "flex" }}
                         >
-                          <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
-                            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
-                          </svg>
-                        </button>
-                        <button
-                          type="button"
-                          className="site-action-btn delete"
-                          onClick={() => handleDelete(index)}
-                          aria-label="削除"
-                        >
-                          <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <path d="M18 6L6 18M6 6l12 12" />
-                          </svg>
-                        </button>
+                          {site.name.charAt(0).toUpperCase() || shortcut}
+                        </span>
                       </div>
+                      <span className="site-key-badge-options">{shortcut}</span>
                     </div>
-                    <div className="site-card-options-icon">
-                      {faviconUrl ? (
-                        <img
-                          src={faviconUrl}
-                          alt=""
-                          className="site-favicon-options"
-                          onError={(e) => {
-                            e.currentTarget.style.display = "none";
-                            const fallback = e.currentTarget
-                              .nextElementSibling as HTMLElement | null;
-                            fallback?.classList.remove("hidden");
-                          }}
-                        />
-                      ) : null}
-                      <span
-                        className={`site-icon-fallback-options ${faviconUrl ? "hidden" : ""}`}
+                    <span className="site-card-options-name">{site.name}</span>
+                    <div className="site-card-options-actions">
+                      <button
+                        type="button"
+                        className="site-action-btn delete"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(index);
+                        }}
+                        aria-label="削除"
                       >
-                        {site.name.charAt(0).toUpperCase() || shortcut}
-                      </span>
+                        <svg
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                        >
+                          <path d="M18 6L6 18M6 6l12 12" />
+                        </svg>
+                      </button>
                     </div>
-                    <div className="site-card-options-name">{site.name}</div>
-                    <div className="site-card-options-url">{site.url}</div>
                   </div>
                 );
               })}
@@ -413,6 +449,7 @@ export const App: React.FC = () => {
           )}
         </section>
 
+        {/* Form Panel */}
         <section className="panel panel-form">
           <div className="form-header">
             <h2 className="panel-title">{formTitle}</h2>
@@ -426,15 +463,48 @@ export const App: React.FC = () => {
               </button>
             )}
           </div>
-          <AddSiteForm
-            onAdd={handleFormSubmit}
-            initialValues={initialFormValues}
-            submitLabel={formSubmitLabel}
-            onSubmitSuccess={resetFormState}
-            title={null}
-          />
+          <form onSubmit={handleFormSubmit}>
+            <div className="form-group">
+              <label className="form-label">サイト名</label>
+              <input
+                type="text"
+                className="form-input"
+                placeholder="例: Google"
+                value={formName}
+                onChange={(e) => setFormName(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">URL</label>
+              <input
+                type="text"
+                className="form-input"
+                placeholder="例: https://google.com"
+                value={formUrl}
+                onChange={(e) => setFormUrl(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">ショートカットキー</label>
+              <input
+                type="text"
+                className="form-input"
+                placeholder="例: G"
+                maxLength={1}
+                value={formKey}
+                onChange={(e) => setFormKey(e.target.value.toUpperCase())}
+              />
+            </div>
+            <button type="submit" className="form-submit">
+              {formSubmitLabel}
+            </button>
+          </form>
         </section>
       </div>
     </div>
   );
 };
+
+const Message: React.FC<MessageState> = ({ text, type }) => (
+  <div className={`message ${type}`}>{text}</div>
+);

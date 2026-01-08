@@ -314,7 +314,7 @@ export const App: React.FC = () => {
 
   return (
     <div className="options-app">
-      <NavBar title="SITE LAUNCHER" subtitle="SETTINGS" actions={navActions} />
+      <NavBar title="RYX-SITE LAUNCHER" subtitle="SETTINGS" actions={navActions} />
       <input
         ref={fileInputRef}
         type="file"

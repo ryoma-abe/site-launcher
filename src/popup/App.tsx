@@ -126,7 +126,7 @@ export const App: React.FC = () => {
   return (
     <div className="app">
       <NavBar
-        title="SITE LAUNCHER"
+        title="RYX-SITE LAUNCHER"
         subtitle="QUICK ACCESS"
         actions={navActions}
       />

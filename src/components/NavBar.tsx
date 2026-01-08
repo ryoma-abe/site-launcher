@@ -76,7 +76,7 @@ export const NavBar: React.FC<NavBarProps> = ({
   subtitle,
   actions = [],
   logoSrc = defaultLogoSrc,
-  logoAlt = 'Site Launcher',
+  logoAlt = 'RYX-Site Launcher',
 }) => {
   return (
     <header className="nav-bar">

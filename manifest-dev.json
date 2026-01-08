@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Site Launcher",
+  "name": "RYX-Site Launcher",
   "version": "2.0.0",
   "description": "キーボードショートカットでお気に入りのサイトを素早く開くChrome拡張機能",
   "permissions": ["storage", "contextMenus"],

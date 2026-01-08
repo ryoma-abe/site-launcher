@@ -56,7 +56,7 @@ const registerContextMenu = () => {
     chrome.contextMenus.create(
       {
         id: CONTEXT_MENU_ID,
-        title: 'Site Launcher に追加',
+        title: 'RYX-Site Launcher に追加',
         contexts: ['page', 'frame', 'link'],
       },
       () => {

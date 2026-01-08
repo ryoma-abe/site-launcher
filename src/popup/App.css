@@ -1,41 +1,58 @@
+/* RYX Design System - Brutalist Dark */
 body {
-  width: 360px;
-  min-height: 460px;
+  width: 520px;
+  min-height: 360px;
   margin: 0;
   padding: 0;
-  font-family: 'Noto Sans JP', 'Hiragino Sans', 'ヒラギノ角ゴ ProN', 'Meiryo', sans-serif;
-  background: #f5f6f8;
-  color: #2f3437;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+    "Helvetica Neue", sans-serif;
+  background: #000000;
+  color: #f1f5f9;
+  overflow: hidden;
 }
 
 .app {
   width: 100%;
   min-height: 100%;
   box-sizing: border-box;
-  padding: 18px 18px 22px;
+  padding: 14px;
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-.surface {
-  background: #ffffff;
-  border-radius: 14px;
+.main-layout {
+  display: flex;
+  gap: 14px;
+  flex: 1;
+  min-height: 0;
+}
+
+.panel {
+  background: #0f172a;
+  border: 2px solid #334155;
   padding: 14px;
-  box-shadow: 0 6px 18px rgba(47, 52, 63, 0.08);
-  border: 1px solid #e5e8ee;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
-.shortcut-info {
-  padding: 12px 14px;
-  background: #ffffff;
-  border-radius: 12px;
-  color: #566070;
-  font-size: 12px;
-  line-height: 1.6;
-  border: 1px solid #e1e6ec;
+.panel-sites {
+  flex: 1;
+  min-width: 0;
 }
 
-.shortcut-info p {
-  margin: 0;
+.panel-form {
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.panel-title {
+  margin: 0 0 12px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
 }

@@ -1,6 +1,6 @@
-import React from 'react';
-import { Site } from '../types';
-import './SiteList.css';
+import React from "react";
+import { Site } from "../types";
+import "./SiteList.css";
 
 interface SiteListProps {
   sites: Site[];
@@ -8,8 +8,11 @@ interface SiteListProps {
   onDelete: (index: number) => void;
 }
 
-export const SiteList: React.FC<SiteListProps> = ({ sites, onSiteClick, onDelete }) => {
-  // サイトのファビコンURLを取得する
+export const SiteList: React.FC<SiteListProps> = ({
+  sites,
+  onSiteClick,
+  onDelete,
+}) => {
   const getFaviconUrl = (url: string) => {
     try {
       const domain = new URL(url).hostname;
@@ -19,60 +22,77 @@ export const SiteList: React.FC<SiteListProps> = ({ sites, onSiteClick, onDelete
     }
   };
 
+  if (sites.length === 0) {
+    return (
+      <div className="site-empty">
+        <span className="site-empty-text">サイトが登録されていません</span>
+      </div>
+    );
+  }
+
   return (
-    <ul className="site-list">
+    <div className="site-grid">
       {sites.map((site, index) => {
         const faviconUrl = getFaviconUrl(site.url);
         const shortcut = site.key.toUpperCase();
 
         return (
-          <li
+          <div
             key={index}
-            className="site-item"
+            className="site-card"
             onClick={(e) => {
-              if (!(e.target as HTMLElement).classList.contains('delete-btn')) {
+              if (!(e.target as HTMLElement).closest(".delete-btn")) {
                 onSiteClick(site.url);
               }
             }}
           >
-            <div className="site-main">
-              <div className="site-icon-wrapper">
-                {faviconUrl ? (
-                  <img
-                    src={faviconUrl}
-                    alt="サイトのファビコン"
-                    className="site-favicon"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      const fallback = e.currentTarget.nextElementSibling as HTMLElement | null;
-                      fallback?.classList.remove('hidden');
-                    }}
-                  />
-                ) : null}
-                <span className={`site-icon-fallback ${faviconUrl ? 'hidden' : ''}`} aria-hidden="true">
-                  {site.name.charAt(0).toUpperCase() || shortcut}
-                </span>
-              </div>
-              <div className="site-info">
-                <div className="site-name">{site.name}</div>
-                <div className="site-url">{site.url}</div>
-              </div>
+            <div className="site-card-header">
+              <span className="site-key">{shortcut}</span>
+              <button
+                className="delete-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(index);
+                }}
+                aria-label="削除"
+              >
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
             </div>
-            <span className="site-key-pill" aria-label={`ショートカット ${shortcut}`}>
-              {shortcut}
-            </span>
-            <button
-              className="delete-btn"
-              onClick={(e) => {
-                e.stopPropagation();
-                onDelete(index);
-              }}
-            >
-              削除
-            </button>
-          </li>
+            <div className="site-card-icon">
+              {faviconUrl ? (
+                <img
+                  src={faviconUrl}
+                  alt=""
+                  className="site-favicon"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                    const fallback = e.currentTarget
+                      .nextElementSibling as HTMLElement | null;
+                    fallback?.classList.remove("hidden");
+                  }}
+                />
+              ) : null}
+              <span
+                className={`site-icon-fallback ${faviconUrl ? "hidden" : ""}`}
+                aria-hidden="true"
+              >
+                {site.name.charAt(0).toUpperCase() || shortcut}
+              </span>
+            </div>
+            <div className="site-card-name">{site.name}</div>
+          </div>
         );
       })}
-    </ul>
+    </div>
   );
 };

@@ -106,14 +106,19 @@ export const App: React.FC = () => {
   }, []);
 
   const openGuidePage = useCallback(() => {
-    chrome.tabs.create({ url: chrome.runtime.getURL("import-export.html") });
+    chrome.tabs.create({ url: "https://ryx.jp/products/site-launcher/guide" });
     window.close();
   }, []);
 
   const navActions = useMemo(
     () => [
       { label: "設定", onClick: openSettingsPage, variant: "primary" as const },
-      { label: "ガイド", onClick: openGuidePage, variant: "ghost" as const },
+      {
+        label: "ガイド",
+        onClick: openGuidePage,
+        variant: "ghost" as const,
+        external: true,
+      },
     ],
     [openGuidePage, openSettingsPage]
   );

@@ -39,12 +39,9 @@ export const App: React.FC = () => {
   const [formKey, setFormKey] = useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const showMessage = useCallback(
-    (text: string, type: "success" | "error") => {
-      setMessage({ text, type });
-    },
-    []
-  );
+  const showMessage = useCallback((text: string, type: "success" | "error") => {
+    setMessage({ text, type });
+  }, []);
 
   const resetFormState = useCallback(() => {
     setFormMode("add");
@@ -79,7 +76,7 @@ export const App: React.FC = () => {
           setFormKey(existingSite.key);
           showMessage(
             "このサイトは既に登録されています。内容を更新できます。",
-            "error"
+            "error",
           );
           return;
         }
@@ -93,19 +90,19 @@ export const App: React.FC = () => {
         if (!availableKey && pending.preferredKey) {
           showMessage(
             "利用可能なショートカットキーがありません。別のキーを指定してください。",
-            "error"
+            "error",
           );
         } else {
           showMessage(
             "右クリックから追加されたサイトです。内容を確認して登録してください。",
-            "success"
+            "success",
           );
         }
       } catch (error) {
         console.error("Failed to load pending site payload", error);
       }
     },
-    [showMessage]
+    [showMessage],
   );
 
   const refreshSites = useCallback(async () => {
@@ -143,7 +140,7 @@ export const App: React.FC = () => {
         resetFormState();
       }
     },
-    [editingIndex, resetFormState, showMessage, sites]
+    [editingIndex, resetFormState, showMessage, sites],
   );
 
   const handleFormSubmit = useCallback(
@@ -162,12 +159,12 @@ export const App: React.FC = () => {
       if (formMode === "edit" && editingIndex !== null) {
         const duplicateKeyIndex = sites.findIndex(
           (item, idx) =>
-            idx !== editingIndex && item.key.toUpperCase() === normalizedKey
+            idx !== editingIndex && item.key.toUpperCase() === normalizedKey,
         );
         if (duplicateKeyIndex !== -1) {
           showMessage(
             "他のサイトで同じショートカットキーが使われています",
-            "error"
+            "error",
           );
           return;
         }
@@ -211,7 +208,7 @@ export const App: React.FC = () => {
       sites,
       showMessage,
       resetFormState,
-    ]
+    ],
   );
 
   const handleEdit = useCallback(
@@ -223,7 +220,7 @@ export const App: React.FC = () => {
       setFormUrl(site.url);
       setFormKey(site.key);
     },
-    [sites]
+    [sites],
   );
 
   const handleCancelEdit = useCallback(() => {
@@ -291,14 +288,15 @@ export const App: React.FC = () => {
         event.target.value = "";
       }
     },
-    [resetFormState, showMessage]
+    [resetFormState, showMessage],
   );
 
   const logoUrl = useMemo(() => {
     try {
       const manifest = chrome.runtime.getManifest();
       const icons = manifest.icons || {};
-      const iconPath = icons["128"] || icons["48"] || icons["32"] || icons["16"];
+      const iconPath =
+        icons["128"] || icons["48"] || icons["32"] || icons["16"];
       return iconPath ? chrome.runtime.getURL(iconPath) : null;
     } catch {
       return null;
@@ -501,6 +499,38 @@ export const App: React.FC = () => {
           </form>
         </section>
       </div>
+
+      {/* Footer - Support Section */}
+      <footer className="support-footer">
+        <div className="support-content">
+          <div className="support-icon">💬</div>
+          <div className="support-text-wrapper">
+            <h3 className="support-title">ご意見・ご要望をお聞かせください</h3>
+            <p className="support-text">
+              Site Launcher をご利用いただきありがとうございます。
+              皆さまの声をもとに、より便利な拡張機能を目指しています。
+            </p>
+          </div>
+          <div className="support-actions">
+            <a
+              href="https://ryx.jp/contact"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="support-btn"
+            >
+              改善リクエストを送る
+            </a>
+            <a
+              href="https://chromewebstore.google.com/detail/site-launcher/jahndejpknmaippmlngfodgkkmiodfai/reviews"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="support-btn primary"
+            >
+              ⭐ レビューを書く
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };

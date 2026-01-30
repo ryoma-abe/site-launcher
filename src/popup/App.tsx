@@ -21,6 +21,10 @@ const getLogoUrl = (): string => {
   return "/icon48.png";
 };
 
+const REVIEW_URL =
+  "https://chromewebstore.google.com/detail/site-launcher/jahndejpknmaippmlngfodgkkmiodfai/reviews";
+const REVIEW_MILESTONE = 10;
+
 export const App: React.FC = () => {
   const [sites, setSites] = useState<Site[]>([]);
   const [message, setMessage] = useState<{
@@ -28,6 +32,7 @@ export const App: React.FC = () => {
     type: "success" | "error";
   } | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showReviewPrompt, setShowReviewPrompt] = useState(false);
 
   const showMessage = useCallback((text: string, type: "success" | "error") => {
     setMessage({ text, type });
@@ -65,6 +70,22 @@ export const App: React.FC = () => {
     return () => clearTimeout(timeout);
   }, [message]);
 
+  // レビュー依頼: 10サイト達成時に一度だけ表示
+  useEffect(() => {
+    const checkReviewPrompt = async () => {
+      try {
+        if (sites.length < REVIEW_MILESTONE) return;
+        const result = await chrome.storage.local.get(["reviewPromptShown"]);
+        if (result.reviewPromptShown) return;
+        await chrome.storage.local.set({ reviewPromptShown: true });
+        setShowReviewPrompt(true);
+      } catch (error) {
+        console.error("Failed to check review prompt", error);
+      }
+    };
+    checkReviewPrompt();
+  }, [sites.length]);
+
   const openSite = useCallback((url: string) => {
     chrome.windows.getLastFocused({ populate: true }, (window) => {
       const activeTab = window.tabs?.find((tab) => tab.active);
@@ -84,7 +105,7 @@ export const App: React.FC = () => {
       setSites(updated);
       showMessage("サイトを削除しました", "success");
     },
-    [showMessage, sites]
+    [showMessage, sites],
   );
 
   const openSettingsPage = useCallback(() => {
@@ -101,6 +122,16 @@ export const App: React.FC = () => {
     window.close();
   }, []);
 
+  const openReviewPage = useCallback(() => {
+    chrome.tabs.create({ url: REVIEW_URL });
+    setShowReviewPrompt(false);
+    window.close();
+  }, []);
+
+  const dismissReviewPrompt = useCallback(() => {
+    setShowReviewPrompt(false);
+  }, []);
+
   const filteredSites = useMemo(() => {
     if (!searchQuery.trim()) return sites;
     const query = searchQuery.toLowerCase();
@@ -108,7 +139,7 @@ export const App: React.FC = () => {
       (site) =>
         site.name.toLowerCase().includes(query) ||
         site.url.toLowerCase().includes(query) ||
-        site.key.toLowerCase().includes(query)
+        site.key.toLowerCase().includes(query),
     );
   }, [sites, searchQuery]);
 
@@ -118,6 +149,28 @@ export const App: React.FC = () => {
     <div className="app">
       {message && (
         <div className={`message ${message.type}`}>{message.text}</div>
+      )}
+
+      {showReviewPrompt && (
+        <div className="review-overlay" onClick={dismissReviewPrompt}>
+          <div className="review-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="review-icon">🎉</div>
+            <h3 className="review-title">{REVIEW_MILESTONE}サイト登録達成！</h3>
+            <p className="review-text">
+              Site Launcher をご愛用いただきありがとうございます。
+              <br />
+              よろしければレビューで応援していただけると励みになります。
+            </p>
+            <div className="review-actions">
+              <button className="review-btn primary" onClick={openReviewPage}>
+                レビューを書く
+              </button>
+              <button className="review-btn" onClick={dismissReviewPrompt}>
+                閉じる
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       <div className="header">
@@ -182,7 +235,7 @@ export const App: React.FC = () => {
             {filteredSites.map((site) => {
               const faviconUrl = getFaviconUrl(site.url);
               const originalIndex = sites.findIndex(
-                (s) => s.key === site.key && s.url === site.url
+                (s) => s.key === site.key && s.url === site.url,
               );
 
               return (

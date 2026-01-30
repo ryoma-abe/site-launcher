@@ -2,9 +2,9 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
-    "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
-    "Helvetica Neue", sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
   color: #f1f5f9;
   min-height: 100vh;
@@ -250,7 +250,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 .site-card-options-name {
@@ -449,6 +450,85 @@ body {
   display: none;
 }
 
+/* Support Footer */
+.support-footer {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.support-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px 24px;
+}
+
+.support-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.support-text-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+
+.support-title {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.support-text {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.support-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.support-btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.support-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.support-btn.primary {
+  background: rgba(250, 204, 21, 0.15);
+  border-color: rgba(250, 204, 21, 0.3);
+  color: #facc15;
+}
+
+.support-btn.primary:hover {
+  background: rgba(250, 204, 21, 0.25);
+}
+
 @media (max-width: 640px) {
   .options-app {
     padding: 20px 16px;
@@ -461,5 +541,20 @@ body {
   .header-actions {
     width: 100%;
     flex-wrap: wrap;
+  }
+
+  .support-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .support-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .support-btn {
+    justify-content: center;
   }
 }

@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "RYX-Site Launcher",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "キーボードショートカットでサイトを素早く開く",
   "permissions": ["storage", "contextMenus"],
   "action": {

@@ -8,6 +8,7 @@ interface NavAction {
   onClick: () => void;
   variant?: NavActionVariant;
   disabled?: boolean;
+  external?: boolean;
 }
 
 interface NavBarProps {
@@ -50,6 +51,24 @@ const resolveLogoSrc = (): string => {
   return '/icon48.png';
 };
 
+const ExternalIcon: React.FC = () => (
+  <svg
+    width="10"
+    height="10"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    style={{ marginLeft: 4 }}
+  >
+    <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6" />
+    <polyline points="15 3 21 3 21 9" />
+    <line x1="10" y1="14" x2="21" y2="3" />
+  </svg>
+);
+
 const defaultLogoSrc = resolveLogoSrc();
 
 export const NavBar: React.FC<NavBarProps> = ({
@@ -57,7 +76,7 @@ export const NavBar: React.FC<NavBarProps> = ({
   subtitle,
   actions = [],
   logoSrc = defaultLogoSrc,
-  logoAlt = 'Site Launcher',
+  logoAlt = 'RYX-Site Launcher',
 }) => {
   return (
     <header className="nav-bar">
@@ -69,7 +88,7 @@ export const NavBar: React.FC<NavBarProps> = ({
         </div>
       </div>
       <div className="nav-actions">
-        {actions.map(({ label, onClick, variant = 'tonal', disabled = false }) => (
+        {actions.map(({ label, onClick, variant = 'tonal', disabled = false, external = false }) => (
           <button
             key={label}
             type="button"
@@ -78,6 +97,7 @@ export const NavBar: React.FC<NavBarProps> = ({
             disabled={disabled}
           >
             {label}
+            {external && <ExternalIcon />}
           </button>
         ))}
       </div>

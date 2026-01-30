@@ -1,13 +1,13 @@
+/* RYX Design System - Brutalist Dark */
 .nav-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 12px 14px;
-  background: linear-gradient(135deg, #eef1f7 0%, #f7f9fb 100%);
-  border-radius: 14px;
-  border: 1px solid #dfe4ec;
-  box-shadow: 0 6px 18px rgba(63, 74, 90, 0.08);
+  padding: 16px;
+  background: #0f172a;
+  border: 2px solid #334155;
+  margin-bottom: 16px;
 }
 
 .nav-title {
@@ -24,76 +24,80 @@
 }
 
 .nav-logo {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
+  width: 32px;
+  height: 32px;
   object-fit: cover;
-  box-shadow: 0 4px 10px rgba(111, 138, 215, 0.18);
 }
 
 .nav-text h1 {
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: #344159;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  text-transform: uppercase;
 }
 
 .nav-subtitle {
   margin: 2px 0 0;
-  font-size: 12px;
-  color: #5f6c7a;
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
 }
 
 .nav-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
   justify-content: flex-end;
 }
 
 .nav-btn {
-  border: none;
-  border-radius: 999px;
+  border: 2px solid transparent;
   cursor: pointer;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 8px 16px;
-  transition: background 0.2s ease, transform 0.1s ease;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 8px 14px;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .nav-btn:disabled {
-  opacity: 0.55;
-  cursor: default;
-  transform: none;
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .nav-btn-primary {
-  background: #4a63b6;
-  color: #ffffff;
+  background: #ffffff;
+  color: #0f172a;
+  border-color: #ffffff;
 }
 
-.nav-btn-primary:hover {
-  background: #3f56ad;
-  transform: translateY(-1px);
+.nav-btn-primary:hover:not(:disabled) {
+  background: #f1f5f9;
 }
 
 .nav-btn-tonal {
-  background: #d7def3;
-  color: #435996;
+  background: #1e293b;
+  color: #94a3b8;
+  border-color: #334155;
 }
 
-.nav-btn-tonal:hover {
-  background: #c6d2f0;
+.nav-btn-tonal:hover:not(:disabled) {
+  background: #334155;
+  color: #f1f5f9;
 }
 
 .nav-btn-ghost {
   background: transparent;
-  color: #4d5f8c;
-  border: 1px solid transparent;
+  color: #64748b;
+  border-color: transparent;
 }
 
-.nav-btn-ghost:hover {
-  background: #eef1f7;
-  border-color: #dbe1eb;
+.nav-btn-ghost:hover:not(:disabled) {
+  background: #1e293b;
+  color: #f1f5f9;
 }

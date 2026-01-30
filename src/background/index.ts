@@ -7,12 +7,38 @@ import {
 } from '../shared/sites';
 
 const CONTEXT_MENU_ID = 'site-launcher-add-current';
+const MIGRATION_KEY = 'migrated_to_local_v1';
+
+const migrateFromSyncToLocal = async (): Promise<boolean> => {
+  try {
+    const migrationStatus = await chrome.storage.local.get([MIGRATION_KEY]);
+    if (migrationStatus[MIGRATION_KEY]) {
+      return false;
+    }
+
+    const syncResult = await chrome.storage.sync.get([SITES_STORAGE_KEY]);
+    const syncSites = syncResult[SITES_STORAGE_KEY];
+
+    if (syncSites && Array.isArray(syncSites) && syncSites.length > 0) {
+      await chrome.storage.local.set({ [SITES_STORAGE_KEY]: syncSites });
+      console.info('Migrated sites from sync to local storage:', syncSites.length, 'sites');
+    }
+
+    await chrome.storage.local.set({ [MIGRATION_KEY]: true });
+    return true;
+  } catch (error) {
+    console.error('Failed to migrate from sync to local', error);
+    return false;
+  }
+};
 
 const ensureDefaultSites = async () => {
   try {
-    const result = await chrome.storage.sync.get([SITES_STORAGE_KEY]);
+    await migrateFromSyncToLocal();
+
+    const result = await chrome.storage.local.get([SITES_STORAGE_KEY]);
     if (!result[SITES_STORAGE_KEY]) {
-      await chrome.storage.sync.set({ [SITES_STORAGE_KEY]: DEFAULT_SITES });
+      await chrome.storage.local.set({ [SITES_STORAGE_KEY]: DEFAULT_SITES });
       console.info('Default sites initialised');
     }
   } catch (error) {
@@ -30,7 +56,7 @@ const registerContextMenu = () => {
     chrome.contextMenus.create(
       {
         id: CONTEXT_MENU_ID,
-        title: 'Site Launcher に追加',
+        title: 'RYX-Site Launcher に追加',
         contexts: ['page', 'frame', 'link'],
       },
       () => {
@@ -99,14 +125,20 @@ const handleContextMenuClick = async (
   }
 };
 
+// インストール時
 chrome.runtime.onInstalled.addListener(async () => {
   await ensureDefaultSites();
   registerContextMenu();
 });
 
+// ブラウザ起動時
 chrome.runtime.onStartup.addListener(() => {
   registerContextMenu();
 });
+
+// サービスワーカー起動時に毎回コンテキストメニューを確認・登録
+// これによりスリープから復帰した時も確実に動作する
+registerContextMenu();
 
 chrome.contextMenus.onClicked.addListener(handleContextMenuClick);
 

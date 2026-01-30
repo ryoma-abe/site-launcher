@@ -1,14 +1,17 @@
+/* RYX Design System - Brutalist Dark */
 .add-site-section {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .add-site-section h3 {
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: #3b4658;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .input-group {
@@ -18,59 +21,64 @@
 }
 
 .input-group label {
-  font-size: 12px;
-  font-weight: 500;
-  color: #687480;
-  letter-spacing: 0.02em;
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .input-group input {
   width: 100%;
-  padding: 10px 14px;
-  border: 1px solid #d8dee6;
-  border-radius: 12px;
-  font-size: 14px;
+  padding: 12px 14px;
+  border: 2px solid #334155;
+  background: #1e293b;
+  color: #f1f5f9;
+  font-size: 13px;
+  font-weight: 500;
   box-sizing: border-box;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  background: #fafbfd;
+  transition: all 0.15s ease;
+}
+
+.input-group input::placeholder {
+  color: #475569;
 }
 
 .input-group input:focus {
   outline: none;
-  border-color: #4a63b6;
-  box-shadow: 0 0 0 2px rgba(74, 99, 182, 0.25);
-  background: #ffffff;
+  border-color: #475569;
+  background: #0f172a;
 }
 
 .btn-add {
   align-self: flex-end;
-  padding: 9px 18px;
-  border-radius: 999px;
-  border: none;
-  background: #4a63b6;
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 14px;
+  padding: 10px 20px;
+  border: 2px solid #ffffff;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 700;
+  font-size: 12px;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .btn-add:hover {
-  background: #3f56ad;
-  transform: translateY(-1px);
+  background: #f1f5f9;
 }
 
 .btn-add:active {
-  transform: translateY(0);
+  background: #e2e8f0;
 }
 
 .form-error {
-  margin: 4px 0 0;
-  padding: 8px 12px;
-  border-radius: 12px;
-  background: #f6dede;
-  color: #b45b5b;
+  margin: 0;
+  padding: 12px 14px;
+  border: 2px solid #e11d48;
+  background: rgba(225, 29, 72, 0.15);
+  color: #fda4af;
   font-size: 12px;
+  font-weight: 500;
   line-height: 1.4;
 }

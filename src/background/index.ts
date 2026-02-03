@@ -56,7 +56,7 @@ const registerContextMenu = () => {
     chrome.contextMenus.create(
       {
         id: CONTEXT_MENU_ID,
-        title: 'RYX-Site Launcher に追加',
+        title: chrome.i18n.getMessage('addToSiteLauncher'),
         contexts: ['page', 'frame', 'link'],
       },
       () => {
@@ -147,7 +147,7 @@ chrome.commands.onCommand.addListener((command) => {
     try {
       chrome.action.openPopup();
     } catch (error) {
-      console.error('ポップアップを開けませんでした:', error);
+      console.error(chrome.i18n.getMessage('failedToOpenPopup'), error);
     }
   }
 });

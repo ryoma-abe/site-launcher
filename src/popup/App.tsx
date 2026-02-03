@@ -99,11 +99,11 @@ export const App: React.FC = () => {
   const deleteSite = useCallback(
     async (index: number, e: React.MouseEvent) => {
       e.stopPropagation();
-      if (!confirm("このサイトを削除しますか？")) return;
+      if (!confirm(chrome.i18n.getMessage("deleteSiteConfirm"))) return;
 
       const updated = await removeSiteByIndex(index, sites);
       setSites(updated);
-      showMessage("サイトを削除しました", "success");
+      showMessage(chrome.i18n.getMessage("siteDeleted"), "success");
     },
     [showMessage, sites],
   );
@@ -155,18 +155,16 @@ export const App: React.FC = () => {
         <div className="review-overlay" onClick={dismissReviewPrompt}>
           <div className="review-modal" onClick={(e) => e.stopPropagation()}>
             <div className="review-icon">🎉</div>
-            <h3 className="review-title">{REVIEW_MILESTONE}サイト登録達成！</h3>
+            <h3 className="review-title">{chrome.i18n.getMessage("reviewMilestoneTitle", [String(REVIEW_MILESTONE)])}</h3>
             <p className="review-text">
-              Site Launcher をご愛用いただきありがとうございます。
-              <br />
-              よろしければレビューで応援していただけると励みになります。
+              {chrome.i18n.getMessage("reviewPromptText")}
             </p>
             <div className="review-actions">
               <button className="review-btn primary" onClick={openReviewPage}>
-                レビューを書く
+                {chrome.i18n.getMessage("writeReview")}
               </button>
               <button className="review-btn" onClick={dismissReviewPrompt}>
-                閉じる
+                {chrome.i18n.getMessage("close")}
               </button>
             </div>
           </div>
@@ -179,7 +177,7 @@ export const App: React.FC = () => {
         </div>
         <div className="header-actions">
           <button className="header-btn" onClick={openGuidePage}>
-            ガイド
+            {chrome.i18n.getMessage("guide")}
             <svg
               width="10"
               height="10"
@@ -194,7 +192,7 @@ export const App: React.FC = () => {
             </svg>
           </button>
           <button className="header-btn primary" onClick={openSettingsPage}>
-            設定
+            {chrome.i18n.getMessage("settings")}
           </button>
         </div>
       </div>
@@ -226,8 +224,8 @@ export const App: React.FC = () => {
           <div className="site-empty">
             <div className="site-empty-text">
               {searchQuery
-                ? "見つかりませんでした"
-                : "サイトが登録されていません"}
+                ? chrome.i18n.getMessage("notFound")
+                : chrome.i18n.getMessage("noSitesRegistered")}
             </div>
           </div>
         ) : (
@@ -328,7 +326,7 @@ export const App: React.FC = () => {
               <line x1="12" y1="5" x2="12" y2="19" />
               <line x1="5" y1="12" x2="19" y2="12" />
             </svg>
-            追加
+            {chrome.i18n.getMessage("add")}
           </button>
         </div>
       </div>

@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && npm run copy-files",
-    "copy-files": "cp manifest-dev.json dist/manifest.json && cp -r public/icon*.png dist/ && cp README.md dist/README.md",
+    "copy-files": "cp manifest-dev.json dist/manifest.json && cp -r public/icon*.png dist/ && cp README.md dist/README.md && cp -r _locales dist/",
     "preview": "vite preview",
     "watch": "vite build --watch"
   },

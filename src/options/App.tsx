@@ -75,7 +75,7 @@ export const App: React.FC = () => {
           setFormUrl(existingSite.url);
           setFormKey(existingSite.key);
           showMessage(
-            "このサイトは既に登録されています。内容を更新できます。",
+            chrome.i18n.getMessage("siteAlreadyRegistered"),
             "error",
           );
           return;
@@ -89,12 +89,12 @@ export const App: React.FC = () => {
 
         if (!availableKey && pending.preferredKey) {
           showMessage(
-            "利用可能なショートカットキーがありません。別のキーを指定してください。",
+            chrome.i18n.getMessage("noAvailableShortcutKey"),
             "error",
           );
         } else {
           showMessage(
-            "右クリックから追加されたサイトです。内容を確認して登録してください。",
+            chrome.i18n.getMessage("siteFromContextMenu"),
             "success",
           );
         }
@@ -128,13 +128,13 @@ export const App: React.FC = () => {
 
   const handleDelete = useCallback(
     async (index: number) => {
-      if (!confirm("このサイトを削除しますか？")) {
+      if (!confirm(chrome.i18n.getMessage("deleteSiteConfirm"))) {
         return;
       }
 
       const updated = await removeSiteByIndex(index, sites);
       setSites(updated);
-      showMessage("サイトを削除しました", "success");
+      showMessage(chrome.i18n.getMessage("siteDeleted"), "success");
 
       if (editingIndex === index) {
         resetFormState();
@@ -152,7 +152,7 @@ export const App: React.FC = () => {
       const normalizedKey = formKey.trim().toUpperCase();
 
       if (!trimmedName || !trimmedUrl || !normalizedKey) {
-        showMessage("すべてのフィールドを入力してください", "error");
+        showMessage(chrome.i18n.getMessage("fillAllFields"), "error");
         return;
       }
 
@@ -163,7 +163,7 @@ export const App: React.FC = () => {
         );
         if (duplicateKeyIndex !== -1) {
           showMessage(
-            "他のサイトで同じショートカットキーが使われています",
+            chrome.i18n.getMessage("duplicateShortcutKey"),
             "error",
           );
           return;
@@ -178,7 +178,7 @@ export const App: React.FC = () => {
 
         await saveSites(updated);
         setSites(updated);
-        showMessage("サイトを更新しました", "success");
+        showMessage(chrome.i18n.getMessage("siteUpdated"), "success");
         resetFormState();
         return;
       }
@@ -196,7 +196,7 @@ export const App: React.FC = () => {
       }
 
       setSites(result.sites);
-      showMessage("サイトを追加しました", "success");
+      showMessage(chrome.i18n.getMessage("siteAdded"), "success");
       resetFormState();
     },
     [
@@ -249,10 +249,10 @@ export const App: React.FC = () => {
       anchor.click();
       document.body.removeChild(anchor);
       URL.revokeObjectURL(url);
-      showMessage("サイトのエクスポートが完了しました", "success");
+      showMessage(chrome.i18n.getMessage("exportCompleted"), "success");
     } catch (error) {
       console.error("Failed to export sites", error);
-      showMessage("エクスポートに失敗しました", "error");
+      showMessage(chrome.i18n.getMessage("exportFailed"), "error");
     } finally {
       setIsExporting(false);
     }
@@ -278,11 +278,11 @@ export const App: React.FC = () => {
           return;
         }
         setSites(result.sites);
-        showMessage("サイトのインポートが完了しました", "success");
+        showMessage(chrome.i18n.getMessage("importCompleted"), "success");
         resetFormState();
       } catch (error) {
         console.error("Failed to import sites", error);
-        showMessage("インポート中にエラーが発生しました", "error");
+        showMessage(chrome.i18n.getMessage("importError"), "error");
       } finally {
         setIsImporting(false);
         event.target.value = "";
@@ -312,8 +312,8 @@ export const App: React.FC = () => {
     }
   };
 
-  const formTitle = formMode === "edit" ? "サイトを編集" : "新規追加";
-  const formSubmitLabel = formMode === "edit" ? "変更を保存" : "追加";
+  const formTitle = formMode === "edit" ? chrome.i18n.getMessage("editSite") : chrome.i18n.getMessage("addNew");
+  const formSubmitLabel = formMode === "edit" ? chrome.i18n.getMessage("saveChanges") : chrome.i18n.getMessage("add");
 
   return (
     <div className="options-app">
@@ -337,7 +337,7 @@ export const App: React.FC = () => {
         </div>
         <div className="header-actions">
           <button className="header-btn" onClick={openGuidePage}>
-            ガイド
+            {chrome.i18n.getMessage("guide")}
             <svg
               width="10"
               height="10"
@@ -352,21 +352,21 @@ export const App: React.FC = () => {
             </svg>
           </button>
           <button className="header-btn" onClick={openShortcutSettings}>
-            ショートカット設定
+            {chrome.i18n.getMessage("shortcutSettings")}
           </button>
           <button
             className="header-btn"
             onClick={handleExport}
             disabled={isExporting}
           >
-            {isExporting ? "エクスポート中…" : "エクスポート"}
+            {isExporting ? chrome.i18n.getMessage("exporting") : chrome.i18n.getMessage("export")}
           </button>
           <button
             className="header-btn primary"
             onClick={triggerImport}
             disabled={isImporting}
           >
-            {isImporting ? "インポート中…" : "インポート"}
+            {isImporting ? chrome.i18n.getMessage("importing") : chrome.i18n.getMessage("import")}
           </button>
         </div>
       </header>
@@ -375,11 +375,11 @@ export const App: React.FC = () => {
       <div className="main-layout">
         {/* Sites Panel */}
         <section className="panel panel-sites">
-          <h2 className="panel-title">登録済みサイト</h2>
+          <h2 className="panel-title">{chrome.i18n.getMessage("registeredSites")}</h2>
           {isLoading ? (
-            <div className="site-grid-empty">読み込み中...</div>
+            <div className="site-grid-empty">{chrome.i18n.getMessage("loading")}</div>
           ) : sites.length === 0 ? (
-            <div className="site-grid-empty">サイトが登録されていません</div>
+            <div className="site-grid-empty">{chrome.i18n.getMessage("noSitesRegistered")}</div>
           ) : (
             <div className="site-grid-options">
               {sites.map((site, index) => {
@@ -426,7 +426,7 @@ export const App: React.FC = () => {
                           e.stopPropagation();
                           handleDelete(index);
                         }}
-                        aria-label="削除"
+                        aria-label={chrome.i18n.getMessage("delete")}
                       >
                         <svg
                           width="12"
@@ -457,37 +457,37 @@ export const App: React.FC = () => {
                 className="btn-link"
                 onClick={handleCancelEdit}
               >
-                キャンセル
+                {chrome.i18n.getMessage("cancel")}
               </button>
             )}
           </div>
           <form onSubmit={handleFormSubmit}>
             <div className="form-group">
-              <label className="form-label">サイト名</label>
+              <label className="form-label">{chrome.i18n.getMessage("siteName")}</label>
               <input
                 type="text"
                 className="form-input"
-                placeholder="例: Google"
+                placeholder={chrome.i18n.getMessage("exampleSiteName")}
                 value={formName}
                 onChange={(e) => setFormName(e.target.value)}
               />
             </div>
             <div className="form-group">
-              <label className="form-label">URL</label>
+              <label className="form-label">{chrome.i18n.getMessage("url")}</label>
               <input
                 type="text"
                 className="form-input"
-                placeholder="例: https://google.com"
+                placeholder={chrome.i18n.getMessage("exampleUrl")}
                 value={formUrl}
                 onChange={(e) => setFormUrl(e.target.value)}
               />
             </div>
             <div className="form-group">
-              <label className="form-label">ショートカットキー</label>
+              <label className="form-label">{chrome.i18n.getMessage("shortcutKey")}</label>
               <input
                 type="text"
                 className="form-input"
-                placeholder="例: G"
+                placeholder={chrome.i18n.getMessage("exampleKey")}
                 maxLength={1}
                 value={formKey}
                 onChange={(e) => setFormKey(e.target.value.toUpperCase())}
@@ -505,10 +505,9 @@ export const App: React.FC = () => {
         <div className="support-content">
           <div className="support-icon">💬</div>
           <div className="support-text-wrapper">
-            <h3 className="support-title">ご意見・ご要望をお聞かせください</h3>
+            <h3 className="support-title">{chrome.i18n.getMessage("feedbackTitle")}</h3>
             <p className="support-text">
-              Site Launcher をご利用いただきありがとうございます。
-              皆さまの声をもとに、より便利な拡張機能を目指しています。
+              {chrome.i18n.getMessage("feedbackText")}
             </p>
           </div>
           <div className="support-actions">
@@ -518,7 +517,7 @@ export const App: React.FC = () => {
               rel="noopener noreferrer"
               className="support-btn"
             >
-              改善リクエストを送る
+              {chrome.i18n.getMessage("sendFeedback")}
             </a>
             <a
               href="https://chromewebstore.google.com/detail/site-launcher/jahndejpknmaippmlngfodgkkmiodfai/reviews"
@@ -526,7 +525,7 @@ export const App: React.FC = () => {
               rel="noopener noreferrer"
               className="support-btn primary"
             >
-              ⭐ レビューを書く
+              {chrome.i18n.getMessage("writeReviewWithStar")}
             </a>
           </div>
         </div>

@@ -1,0 +1,244 @@
+{
+  "extName": {
+    "message": "RYX-Site Launcher",
+    "description": "拡張機能の名前"
+  },
+  "extDescription": {
+    "message": "キーボードショートカットでサイトを素早く開く",
+    "description": "拡張機能の説明"
+  },
+  "openLauncher": {
+    "message": "ランチャーを開く",
+    "description": "コマンドの説明"
+  },
+  "addToSiteLauncher": {
+    "message": "RYX-Site Launcher に追加",
+    "description": "コンテキストメニューのタイトル"
+  },
+  "settings": {
+    "message": "設定",
+    "description": "設定ボタン"
+  },
+  "guide": {
+    "message": "ガイド",
+    "description": "ガイドボタン"
+  },
+  "add": {
+    "message": "追加",
+    "description": "追加ボタン"
+  },
+  "close": {
+    "message": "閉じる",
+    "description": "閉じるボタン"
+  },
+  "cancel": {
+    "message": "キャンセル",
+    "description": "キャンセルボタン"
+  },
+  "delete": {
+    "message": "削除",
+    "description": "削除ボタン"
+  },
+  "deleteSiteConfirm": {
+    "message": "このサイトを削除しますか？",
+    "description": "サイト削除確認メッセージ"
+  },
+  "siteDeleted": {
+    "message": "サイトを削除しました",
+    "description": "サイト削除完了メッセージ"
+  },
+  "siteAdded": {
+    "message": "サイトを追加しました",
+    "description": "サイト追加完了メッセージ"
+  },
+  "siteUpdated": {
+    "message": "サイトを更新しました",
+    "description": "サイト更新完了メッセージ"
+  },
+  "noSitesRegistered": {
+    "message": "サイトが登録されていません",
+    "description": "サイトが登録されていない時のメッセージ"
+  },
+  "notFound": {
+    "message": "見つかりませんでした",
+    "description": "検索結果が見つからない時のメッセージ"
+  },
+  "loading": {
+    "message": "読み込み中...",
+    "description": "ローディング中のメッセージ"
+  },
+  "reviewMilestoneTitle": {
+    "message": "$COUNT$サイト登録達成！",
+    "description": "レビュー依頼タイトル",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
+  "reviewPromptText": {
+    "message": "Site Launcher をご愛用いただきありがとうございます。よろしければレビューで応援していただけると励みになります。",
+    "description": "レビュー依頼テキスト"
+  },
+  "writeReview": {
+    "message": "レビューを書く",
+    "description": "レビューを書くボタン"
+  },
+  "registeredSites": {
+    "message": "登録済みサイト",
+    "description": "登録済みサイトのタイトル"
+  },
+  "addNew": {
+    "message": "新規追加",
+    "description": "新規追加タイトル"
+  },
+  "editSite": {
+    "message": "サイトを編集",
+    "description": "サイト編集タイトル"
+  },
+  "saveChanges": {
+    "message": "変更を保存",
+    "description": "変更を保存ボタン"
+  },
+  "shortcutSettings": {
+    "message": "ショートカット設定",
+    "description": "ショートカット設定ボタン"
+  },
+  "export": {
+    "message": "エクスポート",
+    "description": "エクスポートボタン"
+  },
+  "exporting": {
+    "message": "エクスポート中…",
+    "description": "エクスポート中のボタンテキスト"
+  },
+  "import": {
+    "message": "インポート",
+    "description": "インポートボタン"
+  },
+  "importing": {
+    "message": "インポート中…",
+    "description": "インポート中のボタンテキスト"
+  },
+  "exportCompleted": {
+    "message": "サイトのエクスポートが完了しました",
+    "description": "エクスポート完了メッセージ"
+  },
+  "exportFailed": {
+    "message": "エクスポートに失敗しました",
+    "description": "エクスポート失敗メッセージ"
+  },
+  "importCompleted": {
+    "message": "サイトのインポートが完了しました",
+    "description": "インポート完了メッセージ"
+  },
+  "importError": {
+    "message": "インポート中にエラーが発生しました",
+    "description": "インポートエラーメッセージ"
+  },
+  "siteName": {
+    "message": "サイト名",
+    "description": "サイト名ラベル"
+  },
+  "url": {
+    "message": "URL",
+    "description": "URLラベル"
+  },
+  "shortcutKey": {
+    "message": "ショートカットキー",
+    "description": "ショートカットキーラベル"
+  },
+  "shortcutKeyLabel": {
+    "message": "ショートカットキー (A-Z, 0-9)",
+    "description": "ショートカットキーラベル（詳細版）"
+  },
+  "exampleSiteName": {
+    "message": "例: Google",
+    "description": "サイト名のプレースホルダー"
+  },
+  "exampleUrl": {
+    "message": "例: https://google.com",
+    "description": "URLのプレースホルダー"
+  },
+  "exampleKey": {
+    "message": "例: G",
+    "description": "ショートカットキーのプレースホルダー"
+  },
+  "fillAllFields": {
+    "message": "すべてのフィールドを入力してください",
+    "description": "全フィールド入力必須エラー"
+  },
+  "siteNameTooLong": {
+    "message": "サイト名は50文字以内で入力してください",
+    "description": "サイト名が長すぎるエラー"
+  },
+  "invalidShortcutKey": {
+    "message": "ショートカットキーはA-Z、0-9の1文字にしてください",
+    "description": "無効なショートカットキーエラー"
+  },
+  "invalidUrl": {
+    "message": "有効なURLを入力してください",
+    "description": "無効なURLエラー"
+  },
+  "duplicateShortcutKey": {
+    "message": "他のサイトで同じショートカットキーが使われています",
+    "description": "重複ショートカットキーエラー"
+  },
+  "shortcutKeyAlreadyUsed": {
+    "message": "ショートカットキーがすでに使用されています",
+    "description": "ショートカットキー使用中エラー"
+  },
+  "invalidSiteInfo": {
+    "message": "サイト情報が正しくありません",
+    "description": "無効なサイト情報エラー"
+  },
+  "noSitesToImport": {
+    "message": "インポートできるサイトがありませんでした",
+    "description": "インポートするサイトがないエラー"
+  },
+  "jsonParseFailed": {
+    "message": "JSON の解析に失敗しました",
+    "description": "JSON解析エラー"
+  },
+  "siteAlreadyRegistered": {
+    "message": "このサイトは既に登録されています。内容を更新できます。",
+    "description": "サイト既登録メッセージ"
+  },
+  "noAvailableShortcutKey": {
+    "message": "利用可能なショートカットキーがありません。別のキーを指定してください。",
+    "description": "利用可能なショートカットキーがないエラー"
+  },
+  "siteFromContextMenu": {
+    "message": "右クリックから追加されたサイトです。内容を確認して登録してください。",
+    "description": "コンテキストメニューから追加されたサイトのメッセージ"
+  },
+  "addSite": {
+    "message": "サイトを追加",
+    "description": "サイト追加ボタン"
+  },
+  "addNewSite": {
+    "message": "新しいサイトを追加",
+    "description": "新しいサイトを追加タイトル"
+  },
+  "feedbackTitle": {
+    "message": "ご意見・ご要望をお聞かせください",
+    "description": "フィードバックセクションタイトル"
+  },
+  "feedbackText": {
+    "message": "Site Launcher をご利用いただきありがとうございます。皆さまの声をもとに、より便利な拡張機能を目指しています。",
+    "description": "フィードバックセクションテキスト"
+  },
+  "sendFeedback": {
+    "message": "改善リクエストを送る",
+    "description": "フィードバック送信ボタン"
+  },
+  "writeReviewWithStar": {
+    "message": "⭐ レビューを書く",
+    "description": "レビューを書くボタン（星付き）"
+  },
+  "failedToOpenPopup": {
+    "message": "ポップアップを開けませんでした",
+    "description": "ポップアップを開けなかったエラー"
+  }
+}

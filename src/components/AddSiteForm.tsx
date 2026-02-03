@@ -14,9 +14,9 @@ interface AddSiteFormProps {
 export const AddSiteForm: React.FC<AddSiteFormProps> = ({
   onAdd,
   initialValues = null,
-  submitLabel = 'サイトを追加',
+  submitLabel = chrome.i18n.getMessage('addSite'),
   onSubmitSuccess,
-  title = '新しいサイトを追加',
+  title = chrome.i18n.getMessage('addNewSite'),
 }) => {
   const [name, setName] = useState('');
   const [url, setUrl] = useState('');
@@ -41,17 +41,17 @@ export const AddSiteForm: React.FC<AddSiteFormProps> = ({
   // 入力値のバリデーション
   const validateInput = (name: string, url: string, key: string) => {
     if (!name || !url || !key) {
-      setError('すべてのフィールドを入力してください');
+      setError(chrome.i18n.getMessage('fillAllFields'));
       return false;
     }
 
     if (name.length > 50) {
-      setError('サイト名は50文字以内で入力してください');
+      setError(chrome.i18n.getMessage('siteNameTooLong'));
       return false;
     }
 
     if (!/^[A-Z0-9]$/.test(key)) {
-      setError('ショートカットキーはA-Z、0-9の1文字にしてください');
+      setError(chrome.i18n.getMessage('invalidShortcutKey'));
       return false;
     }
 
@@ -59,7 +59,7 @@ export const AddSiteForm: React.FC<AddSiteFormProps> = ({
     try {
       new URL(url.startsWith('http') ? url : 'https://' + url);
     } catch {
-      setError('有効なURLを入力してください');
+      setError(chrome.i18n.getMessage('invalidUrl'));
       return false;
     }
 
@@ -103,33 +103,33 @@ export const AddSiteForm: React.FC<AddSiteFormProps> = ({
     <div className="add-site-section">
       {title !== null && <h3>{title}</h3>}
       <div className="input-group">
-        <label htmlFor="siteName">サイト名</label>
+        <label htmlFor="siteName">{chrome.i18n.getMessage('siteName')}</label>
         <input
           type="text"
           id="siteName"
-          placeholder="例: Google"
+          placeholder={chrome.i18n.getMessage('exampleSiteName')}
           value={name}
           onChange={(e) => setName(e.target.value)}
           onKeyPress={handleKeyPress}
         />
       </div>
       <div className="input-group">
-        <label htmlFor="siteUrl">URL</label>
+        <label htmlFor="siteUrl">{chrome.i18n.getMessage('url')}</label>
         <input
           type="text"
           id="siteUrl"
-          placeholder="例: https://google.com"
+          placeholder={chrome.i18n.getMessage('exampleUrl')}
           value={url}
           onChange={(e) => setUrl(e.target.value)}
           onKeyPress={handleKeyPress}
         />
       </div>
       <div className="input-group">
-        <label htmlFor="siteKey">ショートカットキー (A-Z, 0-9)</label>
+        <label htmlFor="siteKey">{chrome.i18n.getMessage('shortcutKeyLabel')}</label>
         <input
           type="text"
           id="siteKey"
-          placeholder="例: G"
+          placeholder={chrome.i18n.getMessage('exampleKey')}
           maxLength={1}
           value={shortcutKey}
           onChange={(e) => setShortcutKey(e.target.value)}

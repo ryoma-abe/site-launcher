@@ -1,0 +1,244 @@
+{
+  "extName": {
+    "message": "RYX-Site Launcher",
+    "description": "Extension name"
+  },
+  "extDescription": {
+    "message": "Quickly open sites with keyboard shortcuts",
+    "description": "Extension description"
+  },
+  "openLauncher": {
+    "message": "Open launcher",
+    "description": "Command description"
+  },
+  "addToSiteLauncher": {
+    "message": "Add to RYX-Site Launcher",
+    "description": "Context menu title"
+  },
+  "settings": {
+    "message": "Settings",
+    "description": "Settings button"
+  },
+  "guide": {
+    "message": "Guide",
+    "description": "Guide button"
+  },
+  "add": {
+    "message": "Add",
+    "description": "Add button"
+  },
+  "close": {
+    "message": "Close",
+    "description": "Close button"
+  },
+  "cancel": {
+    "message": "Cancel",
+    "description": "Cancel button"
+  },
+  "delete": {
+    "message": "Delete",
+    "description": "Delete button"
+  },
+  "deleteSiteConfirm": {
+    "message": "Are you sure you want to delete this site?",
+    "description": "Site deletion confirmation message"
+  },
+  "siteDeleted": {
+    "message": "Site deleted",
+    "description": "Site deletion success message"
+  },
+  "siteAdded": {
+    "message": "Site added",
+    "description": "Site addition success message"
+  },
+  "siteUpdated": {
+    "message": "Site updated",
+    "description": "Site update success message"
+  },
+  "noSitesRegistered": {
+    "message": "No sites registered",
+    "description": "Message when no sites are registered"
+  },
+  "notFound": {
+    "message": "Not found",
+    "description": "Message when search results are not found"
+  },
+  "loading": {
+    "message": "Loading...",
+    "description": "Loading message"
+  },
+  "reviewMilestoneTitle": {
+    "message": "$COUNT$ sites registered!",
+    "description": "Review prompt title",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "10"
+      }
+    }
+  },
+  "reviewPromptText": {
+    "message": "Thank you for using Site Launcher. We'd appreciate it if you could support us with a review.",
+    "description": "Review prompt text"
+  },
+  "writeReview": {
+    "message": "Write a review",
+    "description": "Write review button"
+  },
+  "registeredSites": {
+    "message": "Registered Sites",
+    "description": "Registered sites title"
+  },
+  "addNew": {
+    "message": "Add New",
+    "description": "Add new title"
+  },
+  "editSite": {
+    "message": "Edit Site",
+    "description": "Edit site title"
+  },
+  "saveChanges": {
+    "message": "Save Changes",
+    "description": "Save changes button"
+  },
+  "shortcutSettings": {
+    "message": "Shortcut Settings",
+    "description": "Shortcut settings button"
+  },
+  "export": {
+    "message": "Export",
+    "description": "Export button"
+  },
+  "exporting": {
+    "message": "Exporting...",
+    "description": "Exporting button text"
+  },
+  "import": {
+    "message": "Import",
+    "description": "Import button"
+  },
+  "importing": {
+    "message": "Importing...",
+    "description": "Importing button text"
+  },
+  "exportCompleted": {
+    "message": "Sites exported successfully",
+    "description": "Export success message"
+  },
+  "exportFailed": {
+    "message": "Export failed",
+    "description": "Export failure message"
+  },
+  "importCompleted": {
+    "message": "Sites imported successfully",
+    "description": "Import success message"
+  },
+  "importError": {
+    "message": "An error occurred during import",
+    "description": "Import error message"
+  },
+  "siteName": {
+    "message": "Site Name",
+    "description": "Site name label"
+  },
+  "url": {
+    "message": "URL",
+    "description": "URL label"
+  },
+  "shortcutKey": {
+    "message": "Shortcut Key",
+    "description": "Shortcut key label"
+  },
+  "shortcutKeyLabel": {
+    "message": "Shortcut Key (A-Z, 0-9)",
+    "description": "Shortcut key label (detailed)"
+  },
+  "exampleSiteName": {
+    "message": "e.g. Google",
+    "description": "Site name placeholder"
+  },
+  "exampleUrl": {
+    "message": "e.g. https://google.com",
+    "description": "URL placeholder"
+  },
+  "exampleKey": {
+    "message": "e.g. G",
+    "description": "Shortcut key placeholder"
+  },
+  "fillAllFields": {
+    "message": "Please fill in all fields",
+    "description": "All fields required error"
+  },
+  "siteNameTooLong": {
+    "message": "Site name must be 50 characters or less",
+    "description": "Site name too long error"
+  },
+  "invalidShortcutKey": {
+    "message": "Shortcut key must be a single character (A-Z, 0-9)",
+    "description": "Invalid shortcut key error"
+  },
+  "invalidUrl": {
+    "message": "Please enter a valid URL",
+    "description": "Invalid URL error"
+  },
+  "duplicateShortcutKey": {
+    "message": "This shortcut key is already used by another site",
+    "description": "Duplicate shortcut key error"
+  },
+  "shortcutKeyAlreadyUsed": {
+    "message": "Shortcut key is already in use",
+    "description": "Shortcut key in use error"
+  },
+  "invalidSiteInfo": {
+    "message": "Site information is invalid",
+    "description": "Invalid site info error"
+  },
+  "noSitesToImport": {
+    "message": "No sites available to import",
+    "description": "No sites to import error"
+  },
+  "jsonParseFailed": {
+    "message": "Failed to parse JSON",
+    "description": "JSON parse error"
+  },
+  "siteAlreadyRegistered": {
+    "message": "This site is already registered. You can update its details.",
+    "description": "Site already registered message"
+  },
+  "noAvailableShortcutKey": {
+    "message": "No available shortcut keys. Please specify a different key.",
+    "description": "No available shortcut key error"
+  },
+  "siteFromContextMenu": {
+    "message": "Site added from context menu. Please review and register.",
+    "description": "Site from context menu message"
+  },
+  "addSite": {
+    "message": "Add Site",
+    "description": "Add site button"
+  },
+  "addNewSite": {
+    "message": "Add New Site",
+    "description": "Add new site title"
+  },
+  "feedbackTitle": {
+    "message": "Share your feedback",
+    "description": "Feedback section title"
+  },
+  "feedbackText": {
+    "message": "Thank you for using Site Launcher. We're working to make this extension even better based on your feedback.",
+    "description": "Feedback section text"
+  },
+  "sendFeedback": {
+    "message": "Send Feedback",
+    "description": "Send feedback button"
+  },
+  "writeReviewWithStar": {
+    "message": "⭐ Write a Review",
+    "description": "Write review button with star"
+  },
+  "failedToOpenPopup": {
+    "message": "Failed to open popup",
+    "description": "Failed to open popup error"
+  }
+}

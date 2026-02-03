@@ -147,12 +147,12 @@ export const addSite = async (site: Site, baseSites?: Site[]): Promise<{ success
   const existing = sites.find((s) => s.key.toUpperCase() === site.key.toUpperCase());
 
   if (existing) {
-    return { success: false, message: 'ショートカットキーがすでに使用されています' };
+    return { success: false, message: chrome.i18n.getMessage('shortcutKeyAlreadyUsed') };
   }
 
   const normalizedSite = sanitizeSite(site);
   if (!normalizedSite) {
-    return { success: false, message: 'サイト情報が正しくありません' };
+    return { success: false, message: chrome.i18n.getMessage('invalidSiteInfo') };
   }
 
   const updated = [...sites, normalizedSite];
@@ -200,13 +200,13 @@ export const importSitesFromJson = async (json: string): Promise<{ success: true
     const sanitized = sanitizeSiteList(candidate);
 
     if (!sanitized.length) {
-      return { success: false, message: 'インポートできるサイトがありませんでした' };
+      return { success: false, message: chrome.i18n.getMessage('noSitesToImport') };
     }
 
     await saveSites(sanitized);
     return { success: true, sites: sanitized };
   } catch (error) {
     console.error('Failed to import sites', error);
-    return { success: false, message: 'JSON の解析に失敗しました' };
+    return { success: false, message: chrome.i18n.getMessage('jsonParseFailed') };
   }
 };

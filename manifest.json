@@ -1,8 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "RYX-Site Launcher",
+  "name": "__MSG_extName__",
   "version": "2.2.0",
-  "description": "キーボードショートカットでサイトを素早く開く",
+  "description": "__MSG_extDescription__",
+  "default_locale": "ja",
   "permissions": ["storage", "contextMenus"],
   "action": {
     "default_popup": "dist/popup.html",
@@ -23,7 +24,7 @@
         "default": "Ctrl+M",
         "mac": "Command+M"
       },
-      "description": "ランチャーを開く"
+      "description": "__MSG_openLauncher__"
     }
   },
   "background": {

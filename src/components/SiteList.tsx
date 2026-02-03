@@ -25,7 +25,7 @@ export const SiteList: React.FC<SiteListProps> = ({
   if (sites.length === 0) {
     return (
       <div className="site-empty">
-        <span className="site-empty-text">サイトが登録されていません</span>
+        <span className="site-empty-text">{chrome.i18n.getMessage("noSitesRegistered")}</span>
       </div>
     );
   }
@@ -54,7 +54,7 @@ export const SiteList: React.FC<SiteListProps> = ({
                   e.stopPropagation();
                   onDelete(index);
                 }}
-                aria-label="削除"
+                aria-label={chrome.i18n.getMessage("delete")}
               >
                 <svg
                   width="12"
